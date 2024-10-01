@@ -20,3 +20,7 @@ Siga os passos abaixo para contribuir com o repositório:
    ```bash
    git push origin 'develop/feat/minha-branch'
 4. Após publicar seus commits, abra uma Pull Request (PR) e aguarde a revisão!
+
+Para puxar mudanças utilize:
+   ```bash
+   git pull origin 'branch-que-eu-quero-puxar'
