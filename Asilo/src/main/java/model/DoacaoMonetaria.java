@@ -1,39 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
-/**
- *
- * @author saraa
- */
-public class DoacaoMonetaria {
-    private float valor;
+public class DoacaoMonetaria implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+    private double valor;
+    private String doador;
     private Date data;
 
-    public DoacaoMonetaria(float valor, Date data) {
+    public DoacaoMonetaria(double valor, String doador) {
+        this.id = UUID.randomUUID().toString();
         this.valor = valor;
-        this.data = data;
+        this.doador = doador;
+        this.data = new Date();
     }
 
-    public float getValor() {
+    public String getId() {
+        return id;
+    }
+
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(float valor) {
-        this.valor = valor;
+    public String getDoador() {
+        return doador;
     }
 
     public Date getData() {
         return data;
     }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-    
-    
 }

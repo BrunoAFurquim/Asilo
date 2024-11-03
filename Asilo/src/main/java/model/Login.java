@@ -1,37 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author saraa
- */
 public class Login {
-    private String email;
-    private String senha;
+    private final Repositorio repositorio;
+    private Usuario usuario = null;
+    private Adm adm = null;
 
-    public Login(String email, String senha) {
-        this.email = email;
-        this.senha = senha;
+    public Login(String email, String senha) throws Exception {
+        this.repositorio = Repositorio.getInstance();
+
+        this.usuario = this.repositorio.loginUsuario(email, senha);
+        if (this.usuario == null) {
+            this.adm = this.repositorio.loginAdm(email, senha);
+            if (this.adm == null) {
+                 throw new LoginException("Usuário não encontrado");
+            }
+        }
     }
 
-    public String getEmail() {
-        return email;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Adm getAdm() {
+        return adm;
     }
 
-    public String getSenha() {
-        return senha;
+    public boolean isUsuarioLogado() {
+        return usuario != null;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public boolean isAdmLogado() {
+        return adm != null;
     }
     
-    
+    public void encerrarSessao(){
+        this.repositorio.salvarDados();
+    }
 }

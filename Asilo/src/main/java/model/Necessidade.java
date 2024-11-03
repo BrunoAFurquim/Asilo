@@ -1,22 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author saraa
- */
-public class Necessidade {
+import java.io.Serializable;
+import java.util.UUID;
+
+public class Necessidade implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String id;
     private String nome;
     private String descricao;
     private int categoria;
 
     public Necessidade(String nome, String descricao, int categoria) {
+        this.id = UUID.randomUUID().toString();
         this.nome = nome;
         this.descricao = descricao;
         this.categoria = categoria;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getNome() {
@@ -42,6 +45,4 @@ public class Necessidade {
     public void setCategoria(int categoria) {
         this.categoria = categoria;
     }
-    
-    
 }
