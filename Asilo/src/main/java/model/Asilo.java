@@ -1,23 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author saraa
- */
-public class Asilo {
+import java.io.Serializable;
+
+public class Asilo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nome;
     private String endereco;
     private String telefone;
+    private String email;
     private String chavePix;
 
-    public Asilo(String nome, String endereco, String telefone, String chavePix) {
+    public Asilo(String nome, String endereco, String telefone, String email, String chavePix) {
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
+        this.email = email;
         this.chavePix = chavePix;
     }
 
@@ -45,6 +43,14 @@ public class Asilo {
         this.telefone = telefone;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getChavePix() {
         return chavePix;
     }
@@ -52,6 +58,4 @@ public class Asilo {
     public void setChavePix(String chavePix) {
         this.chavePix = chavePix;
     }
-    
-    
 }

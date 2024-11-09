@@ -1,20 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author saraa
- */
-public class Publicacao {
-    private String titulo;
-    private int descricao;
+import java.io.Serializable;
+import java.util.UUID;
 
-    public Publicacao(String titulo, int descricao) {
+public class Publicacao implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+    private String titulo;
+    private String descricao;
+
+    public Publicacao(String titulo, String descricao) {
+        this.id = UUID.randomUUID().toString();
         this.titulo = titulo;
         this.descricao = descricao;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getTitulo() {
@@ -25,13 +28,11 @@ public class Publicacao {
         this.titulo = titulo;
     }
 
-    public int getDescricao() {
+    public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(int descricao) {
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
 }

@@ -1,24 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author saraa
- */
-public class Usuario {
+import java.io.Serializable;
+import java.util.UUID;
+
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final String id;
     private String nome;
     private String email;
-    private String senha;
+    private String senha; // armazenada como hash
+    private String endereco;
     private String telefone;
 
-    public Usuario(String nome, String email, String senha, String telefone) {
+    public Usuario(String nome, String email, String senha, String endereco, String telefone) {
+        this.id = UUID.randomUUID().toString();
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.endereco = endereco;
         this.telefone = telefone;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getNome() {
@@ -45,6 +50,14 @@ public class Usuario {
         this.senha = senha;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
     public String getTelefone() {
         return telefone;
     }
@@ -52,6 +65,4 @@ public class Usuario {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
-    
 }
