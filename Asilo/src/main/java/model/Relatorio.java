@@ -1,22 +1,24 @@
 
 package model;
 
+
+import instancia.DAO;
 import java.util.Date;
 
 
 public class Relatorio {
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public Relatorio() {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
     }
 
       public String gerarRelatorioTransparencia() {
-        return repositorio.gerarRelatorioTransparencia();
+        return dao.gerarRelatorioTransparencia();
     }
 
     public String gerarRelatorioMensalArrecadacoes(Date mesAno) {
-        return repositorio.gerarRelatorioMensalArrecadacoes(mesAno);
+        return dao.gerarRelatorioMensalArrecadacoes(mesAno);
     }
 
 }

@@ -1,4 +1,4 @@
-package model;
+package instancia;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,13 +11,19 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import model.Adm;
+import model.Asilo;
+import model.DoacaoMonetaria;
+import model.Necessidade;
+import model.Publicacao;
+import model.Usuario;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-public class Repositorio implements Serializable {
+public class DAO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static Repositorio repo;
+    private static DAO instancia;
 
     private final ArrayList<Usuario> usuarios;
     private final ArrayList<DoacaoMonetaria> doacoes;
@@ -26,7 +32,7 @@ public class Repositorio implements Serializable {
     private Asilo asilo;
     private Adm adm;
 
-    public Repositorio() {
+    public DAO() {
         usuarios = new ArrayList<>();
         doacoes = new ArrayList<>();
         necessidades = new ArrayList<>();
@@ -35,15 +41,16 @@ public class Repositorio implements Serializable {
         adm = null;
     }
 
-    public static Repositorio getInstance() {
+    public static DAO getInstance() {
        
-        if (repo == null) {
-            repo = carregarDados();
-            if (repo == null) {
-                repo = new Repositorio();
+        if (instancia == null) {
+            instancia = carregarDados();
+            if (instancia == null) {
+                instancia = new DAO();
+                instancia.cadastrarAdm("admin", "admin", "admin", 40028922);
             }
         }
-        return repo;
+        return instancia;
     }
     
 
@@ -158,7 +165,7 @@ public class Repositorio implements Serializable {
     }
 
     // Criar Necessidade
-    public Necessidade criarNecessidade(String nome, String descricao, int categoria) {
+    public Necessidade criarNecessidade(String nome, String descricao, String categoria) {
         Necessidade necessidade = new Necessidade(nome, descricao, categoria);
         necessidades.add(necessidade);
         salvarDados();
@@ -166,7 +173,7 @@ public class Repositorio implements Serializable {
     }
 
     // Atualizar Necessidade
-    public void atualizarNecessidade(String id, String nome, String descricao, int categoria) {
+    public void atualizarNecessidade(String id, String nome, String descricao, String categoria) {
         for (Necessidade necessidade : necessidades) {
             if (necessidade.getId().equals(id)) {
                 necessidade.setNome(nome);
@@ -269,9 +276,10 @@ public class Repositorio implements Serializable {
         }
     }
 
-    public static Repositorio carregarDados() {
-        try (FileInputStream fileIn = new FileInputStream("dados.txt"); ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            return (Repositorio) in.readObject();
+    public static DAO carregarDados() {
+        try (FileInputStream fileIn = new FileInputStream("dados.txt"); 
+                ObjectInputStream in = new ObjectInputStream(fileIn)) {
+            return (DAO) in.readObject();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

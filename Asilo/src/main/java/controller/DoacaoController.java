@@ -3,20 +3,20 @@ package controller;
 
 import java.util.ArrayList;
 import model.DoacaoMonetaria;
-import model.Repositorio;
+import instancia.DAO;
 
 public class DoacaoController {
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public DoacaoController() {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
     }
 
     public DoacaoMonetaria cadastrarDoacao(double valor, String doador) {
-        return repositorio.cadastrarDoacao(valor, doador);
+        return dao.cadastrarDoacao(valor, doador);
     }
 
     public ArrayList<DoacaoMonetaria> listarDoacoes() {
-        return repositorio.getDoacoes();
+        return dao.getDoacoes();
     }
 }

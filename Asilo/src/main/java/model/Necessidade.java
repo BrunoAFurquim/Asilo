@@ -9,9 +9,9 @@ public class Necessidade implements Serializable {
     private String id;
     private String nome;
     private String descricao;
-    private int categoria;
+    private String categoria;
 
-    public Necessidade(String nome, String descricao, int categoria) {
+    public Necessidade(String nome, String descricao, String categoria) {
         this.id = UUID.randomUUID().toString();
         this.nome = nome;
         this.descricao = descricao;
@@ -38,11 +38,11 @@ public class Necessidade implements Serializable {
         this.descricao = descricao;
     }
 
-    public int getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(int categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 }

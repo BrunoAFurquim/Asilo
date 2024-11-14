@@ -1,25 +1,25 @@
 package controller;
 
 import model.Asilo;
-import model.Repositorio;
+import instancia.DAO;
 
 public class AsiloController {
 
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public AsiloController() {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
     }
     
     public Asilo cadastrarAsilo(String nome, String endereco, String telefone, String email, String chavePix) {
-        return repositorio.cadastrarAsilo(nome, endereco, telefone, email, chavePix);
+        return dao.cadastrarAsilo(nome, endereco, telefone, email, chavePix);
     }
 
     public Asilo atualizarAsilo(String nome, String endereco, String telefone, String email, String chavePix) {
-        return repositorio.atualizarAsilo(nome, endereco, telefone, email, chavePix);
+        return dao.atualizarAsilo(nome, endereco, telefone, email, chavePix);
     }
 
     public Asilo getAsilo() {
-        return repositorio.getAsilo();
+        return dao.getAsilo();
     }
 }

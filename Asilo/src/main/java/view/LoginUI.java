@@ -17,6 +17,7 @@ public class LoginUI extends javax.swing.JFrame {
 
     public LoginUI() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -202,6 +203,7 @@ public class LoginUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginUI().setVisible(true);
+                
             }
         });
     }

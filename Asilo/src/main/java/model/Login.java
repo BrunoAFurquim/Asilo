@@ -1,16 +1,20 @@
 package model;
 
+import instancia.DAO;
+
+
+
 public class Login {
-    private final Repositorio repositorio;
+    private final DAO dao;
     private Usuario usuario = null;
     private Adm adm = null;
 
     public Login(String email, String senha) throws Exception {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
 
-        this.usuario = this.repositorio.loginUsuario(email, senha);
+        this.usuario = this.dao.loginUsuario(email, senha);
         if (this.usuario == null) {
-            this.adm = this.repositorio.loginAdm(email, senha);
+            this.adm = this.dao.loginAdm(email, senha);
             if (this.adm == null) {
                  throw new LoginException("Usuário não encontrado");
             }
@@ -34,6 +38,6 @@ public class Login {
     }
     
     public void encerrarSessao(){
-        this.repositorio.salvarDados();
+        this.dao.salvarDados();
     }
 }

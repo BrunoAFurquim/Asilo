@@ -6,29 +6,29 @@ package controller;
 
 import java.util.ArrayList;
 import model.Necessidade;
-import model.Repositorio;
+import instancia.DAO;
 
 public class NecessidadeController {
 
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public NecessidadeController() {
-        repositorio = Repositorio.getInstance();
+        dao = DAO.getInstance();
     }
 
-    public Necessidade criarNecessidade(String nome, String descricao, int categoria) {
-        return repositorio.criarNecessidade(nome, descricao, categoria);
+    public Necessidade criarNecessidade(String nome, String descricao, String categoria) {
+        return dao.criarNecessidade(nome, descricao, categoria);
     }
 
-    public void atualizarNecessidade(String id, String nome, String descricao, int categoria) {
-        repositorio.atualizarNecessidade(id, nome, descricao, categoria);
+    public void atualizarNecessidade(String id, String nome, String descricao, String categoria) {
+        dao.atualizarNecessidade(id, nome, descricao, categoria);
     }
 
     public ArrayList<Necessidade> listarNecessidades() {
-        return repositorio.getNecessidades();
+        return dao.getNecessidades();
     }
 
     public void removerNecessidade(String id) {
-        repositorio.deletarNecessidade(id);
+        dao.deletarNecessidade(id);
     }
 }

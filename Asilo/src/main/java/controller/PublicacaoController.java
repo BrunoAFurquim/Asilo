@@ -6,28 +6,28 @@ package controller;
 
 import java.util.ArrayList;
 import model.Publicacao;
-import model.Repositorio;
+import instancia.DAO;
 
 public class PublicacaoController {
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public PublicacaoController() {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
     }
 
     public void criarPublicacao(String titulo, String descricao) {
-        repositorio.criarPublicacao(titulo, descricao);
+        dao.criarPublicacao(titulo, descricao);
     }
 
     public Publicacao atualizarPublicacao(String id, String titulo, String descricao) {
-        return repositorio.atualizarPublicacao(id, titulo, descricao);
+        return dao.atualizarPublicacao(id, titulo, descricao);
     }
 
     public ArrayList<Publicacao> listarPublicacoes() {
-        return repositorio.getPublicacoes();
+        return dao.getPublicacoes();
     }
 
     public void removerPublicacao(String id) {
-        repositorio.deletarPublicacao(id);
+        dao.deletarPublicacao(id);
     }
 }

@@ -1,26 +1,26 @@
 package controller;
 
 import model.Adm;
-import model.Repositorio;
+import instancia.DAO;
 
 public class AdmController {
 
-    private final Repositorio repositorio;
+    private final DAO dao;
 
     public AdmController() {
-        this.repositorio = Repositorio.getInstance();
+        this.dao = DAO.getInstance();
       
     }
 
     public Adm cadastrarAdm(String nome, String email, String senha, int telefone) {
-        return repositorio.cadastrarAdm(nome, email, senha, telefone);
+        return dao.cadastrarAdm(nome, email, senha, telefone);
     }
 
     public Adm atualizarAdm(String nome, String email, String senha, int telefone) {
-        return repositorio.atualizarAdm(nome, email, senha, telefone);
+        return dao.atualizarAdm(nome, email, senha, telefone);
     }
 
     public Adm getAdm() {
-        return repositorio.getAdm();
+        return dao.getAdm();
     }
 }
