@@ -1,22 +1,28 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class DoacaoMonetaria implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private String id;
     private double valor;
     private String doador;
-    private Date data;
+    private String data;
+    private String metodo;
 
-    public DoacaoMonetaria(double valor, String doador) {
+    public DoacaoMonetaria(double valor, String doador, String metodo) {
         this.id = UUID.randomUUID().toString();
         this.valor = valor;
         this.doador = doador;
-        this.data = new Date();
+        LocalDate hoje = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.data = hoje.format(formatter);
+        this.metodo = metodo;
     }
 
     public String getId() {
@@ -31,7 +37,13 @@ public class DoacaoMonetaria implements Serializable {
         return doador;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
+
+    public String getMetodo() {
+        return metodo;
+    }
+    
+    
 }

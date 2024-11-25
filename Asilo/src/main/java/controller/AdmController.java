@@ -1,7 +1,7 @@
 package controller;
 
 import model.Adm;
-import instancia.DAO;
+import dao.DAO;
 
 public class AdmController {
 
@@ -18,6 +18,13 @@ public class AdmController {
 
     public Adm atualizarAdm(String nome, String email, String senha, int telefone) {
         return dao.atualizarAdm(nome, email, senha, telefone);
+    }
+    public Adm atualizarAdm(String nome, String email, int telefone) {
+        return dao.atualizarAdm(nome, email, telefone);
+    }
+    
+    public Adm atualizarSenhaAdm(String senha) {
+        return dao.atualizarSenhaAdm(senha);
     }
 
     public Adm getAdm() {

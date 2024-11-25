@@ -1,7 +1,7 @@
 package controller;
 
 import model.Asilo;
-import instancia.DAO;
+import dao.DAO;
 
 public class AsiloController {
 
@@ -18,8 +18,18 @@ public class AsiloController {
     public Asilo atualizarAsilo(String nome, String endereco, String telefone, String email, String chavePix) {
         return dao.atualizarAsilo(nome, endereco, telefone, email, chavePix);
     }
+   
 
     public Asilo getAsilo() {
         return dao.getAsilo();
+    }
+    
+    public Asilo atualizarMeta(double meta){
+        return dao.atualizarMeta(meta);
+
+    }
+    
+    public double getMeta(){
+        return dao.getMeta();
     }
 }

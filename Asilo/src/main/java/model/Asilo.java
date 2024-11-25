@@ -10,14 +10,35 @@ public class Asilo implements Serializable {
     private String telefone;
     private String email;
     private String chavePix;
+    private double meta;
 
-    public Asilo(String nome, String endereco, String telefone, String email, String chavePix) {
+    public Asilo(String nome, String endereco, String telefone, String email, String chavePix, double meta) {
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
         this.email = email;
         this.chavePix = chavePix;
+        this.meta = meta;
     }
+
+    public double getMeta() {
+        return meta;
+    }
+
+    public void setMeta(double meta) {
+        this.meta = meta;
+    }
+    
+
+    public Asilo() {
+        this.nome = "";
+        this.endereco = "";
+        this.telefone = "";
+        this.email = "";
+        this.chavePix = "";
+    }
+    
+    
 
     public String getNome() {
         return nome;

@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package model.util;
 
-import instancia.DAO;
+import dao.DAO;
 import javax.swing.table.AbstractTableModel;
+import model.Necessidade;
 
 /**
  *
@@ -18,7 +19,7 @@ public class TabelaNecessidades extends AbstractTableModel {
 
     public TabelaNecessidades() {
         this.dao = DAO.getInstance();
-        this.colunas = new String[]{"Nome", "Categoria", "Descrição"};
+        this.colunas = new String[]{"Necessidade", "Categoria", "Descrição"};
     }
 
     @Override

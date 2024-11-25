@@ -6,7 +6,7 @@ package controller;
 
 import model.Adm;
 import model.Login;
-import model.LoginException;
+import model.util.LoginException;
 import model.Usuario;
 
 public class LoginController {

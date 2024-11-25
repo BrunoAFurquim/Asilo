@@ -1,6 +1,7 @@
 package model;
 
-import instancia.DAO;
+import model.util.LoginException;
+import dao.DAO;
 
 
 

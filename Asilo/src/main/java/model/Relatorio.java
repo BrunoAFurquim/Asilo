@@ -2,7 +2,7 @@
 package model;
 
 
-import instancia.DAO;
+import dao.DAO;
 import java.util.Date;
 
 
