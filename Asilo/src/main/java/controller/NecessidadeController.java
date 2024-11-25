@@ -6,7 +6,7 @@ package controller;
 
 import java.util.ArrayList;
 import model.Necessidade;
-import instancia.DAO;
+import dao.DAO;
 
 public class NecessidadeController {
 
@@ -30,5 +30,9 @@ public class NecessidadeController {
 
     public void removerNecessidade(String id) {
         dao.deletarNecessidade(id);
+    }
+    
+    public Necessidade addNecessidadeAtendida(Necessidade n){
+        return dao.addNecessidadeAtendida(n);
     }
 }

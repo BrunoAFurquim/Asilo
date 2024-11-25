@@ -1,22 +1,24 @@
-package instancia;
+package dao;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import model.Adm;
 import model.Asilo;
 import model.DoacaoMonetaria;
 import model.Necessidade;
 import model.Publicacao;
 import model.Usuario;
+import model.util.Email;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -28,6 +30,7 @@ public class DAO implements Serializable {
     private final ArrayList<Usuario> usuarios;
     private final ArrayList<DoacaoMonetaria> doacoes;
     private final ArrayList<Necessidade> necessidades;
+    private final ArrayList<Necessidade> necessidadesAtendidas;
     private final ArrayList<Publicacao> publicacoes;
     private Asilo asilo;
     private Adm adm;
@@ -36,24 +39,24 @@ public class DAO implements Serializable {
         usuarios = new ArrayList<>();
         doacoes = new ArrayList<>();
         necessidades = new ArrayList<>();
+        necessidadesAtendidas = new ArrayList<>();
         publicacoes = new ArrayList<>();
         asilo = null;
         adm = null;
     }
 
     public static DAO getInstance() {
-       
+
         if (instancia == null) {
             instancia = carregarDados();
             if (instancia == null) {
                 instancia = new DAO();
                 instancia.cadastrarAdm("admin", "admin", "admin", 40028922);
+                instancia.asilo = new Asilo();
             }
         }
         return instancia;
     }
-    
-
 
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
@@ -84,10 +87,17 @@ public class DAO implements Serializable {
         return doacoes;
     }
 
-    public DoacaoMonetaria cadastrarDoacao(double valor, String doador) {
-        DoacaoMonetaria doacao = new DoacaoMonetaria(valor, doador);
+    public ArrayList<Necessidade> getNecessidadesAtendidas() {
+        return necessidadesAtendidas;
+    }
+
+    public DoacaoMonetaria cadastrarDoacao(double valor, String emailDoador, String metodo) throws IOException {
+        Usuario doador = getUsuarioPorEmail(emailDoador);
+        Email email = new Email();
+        email.notificarDoacao(doador, valor);
+        DoacaoMonetaria doacao = new DoacaoMonetaria(valor, emailDoador, metodo);
         doacoes.add(doacao);
-        salvarDados();
+        salvarDados();  
         return doacao;
     }
 
@@ -99,7 +109,6 @@ public class DAO implements Serializable {
         return BCrypt.checkpw(senha, hashed);
     }
 
-    // Cadastrar Usuário com segurança na senha
     public Usuario cadastrarUsuario(String nome, String email, String senha, String endereco, String telefone) {
         Usuario usuario = new Usuario(nome, email, hashSenha(senha), endereco, telefone);
         usuarios.add(usuario);
@@ -107,7 +116,7 @@ public class DAO implements Serializable {
         return usuario;
     }
 
-    // Atualizar Usuário com segurança na senha
+
     public Usuario atualizarUsuario(String id, String nome, String email, String senha, String endereco, String telefone) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equals(id)) {
@@ -123,6 +132,31 @@ public class DAO implements Serializable {
         return null;
     }
 
+    public Usuario atualizarUsuario(String id, String nome, String email, String endereco, String telefone) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().equals(id)) {
+                usuario.setNome(nome);
+                usuario.setEmail(email);
+                usuario.setEndereco(endereco);
+                usuario.setTelefone(telefone);
+                salvarDados();
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public Usuario atualizarSenhaUsuario(String id, String novaSenha) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().equals(id)) {
+                usuario.setSenha(hashSenha(novaSenha));
+                salvarDados();
+                return usuario;
+            }
+        }
+        return null;
+    }
+
     // Cadastrar Administrador com segurança na senha
     public Adm cadastrarAdm(String nome, String email, String senha, int telefone) {
         Adm adm = new Adm(nome, email, hashSenha(senha), telefone);
@@ -131,7 +165,6 @@ public class DAO implements Serializable {
         return adm;
     }
 
-    // Atualizar Administrador com segurança na senha
     public Adm atualizarAdm(String nome, String email, String senha, int telefone) {
         if (this.adm != null && adm.getNome().equals(nome)) {
             adm.setEmail(email);
@@ -143,9 +176,25 @@ public class DAO implements Serializable {
         return null;
     }
 
+    public Adm atualizarAdm(String nome, String email, int telefone) {
+        if (this.adm != null && adm.getNome().equals(nome)) {
+            adm.setEmail(email);
+            adm.setTelefone(telefone);
+            salvarDados();
+            return adm;
+        }
+        return null;
+    }
+
+    public Adm atualizarSenhaAdm(String novaSenha) {
+        this.adm.setSenha(hashSenha(novaSenha));
+        salvarDados();
+        return adm;
+    }
+
     // Cadastrar Asilo
     public Asilo cadastrarAsilo(String nome, String endereco, String telefone, String email, String chavePix) {
-        Asilo asilo = new Asilo(nome, endereco, telefone, email, chavePix);
+        Asilo asilo = new Asilo(nome, endereco, telefone, email, chavePix, 0.0);
         this.asilo = asilo;
         salvarDados();
         return asilo;
@@ -153,21 +202,36 @@ public class DAO implements Serializable {
 
     // Atualizar Asilo
     public Asilo atualizarAsilo(String nome, String endereco, String telefone, String email, String chavePix) {
-        if (asilo != null && asilo.getNome().equals(nome)) {
-            asilo.setEndereco(endereco);
-            asilo.setTelefone(telefone);
-            asilo.setEmail(email);
-            asilo.setChavePix(chavePix);
-            salvarDados();
-            return asilo;
-        }
-        return null;
+        asilo.setNome(nome);
+        asilo.setEndereco(endereco);
+        asilo.setTelefone(telefone);
+        asilo.setEmail(email);
+        asilo.setChavePix(chavePix);
+        salvarDados();
+        return asilo;
+
+    }
+
+    public Asilo atualizarMeta(double meta) {
+        asilo.setMeta(meta);
+        salvarDados();
+        return asilo;
+    }
+
+    public double getMeta() {
+        return asilo.getMeta();
     }
 
     // Criar Necessidade
     public Necessidade criarNecessidade(String nome, String descricao, String categoria) {
         Necessidade necessidade = new Necessidade(nome, descricao, categoria);
         necessidades.add(necessidade);
+        salvarDados();
+        return necessidade;
+    }
+
+    public Necessidade addNecessidadeAtendida(Necessidade necessidade) {
+        necessidadesAtendidas.add(necessidade);
         salvarDados();
         return necessidade;
     }
@@ -191,13 +255,11 @@ public class DAO implements Serializable {
         salvarDados();
     }
 
-    // Deletar Publicação
     public void deletarPublicacao(String id) {
         publicacoes.removeIf(publicacao -> publicacao.getId().equals(id));
         salvarDados();
     }
 
-    // Atualizar Publicação
     public Publicacao atualizarPublicacao(String id, String titulo, String descricao) {
         for (Publicacao publicacao : publicacoes) {
             if (publicacao.getId().equals(id)) {
@@ -263,9 +325,9 @@ public class DAO implements Serializable {
         return relatorio.toString();
     }
 
-    private boolean isSameMonth(Date date1, Date date2) {
-        SimpleDateFormat fmt = new SimpleDateFormat("MM/yyyy");
-        return fmt.format(date1).equals(fmt.format(date2));
+    private boolean isSameMonth(String date1, Date date2) {
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+        return date1.equals(fmt.format(date2));
     }
 
     public void salvarDados() {
@@ -277,8 +339,7 @@ public class DAO implements Serializable {
     }
 
     public static DAO carregarDados() {
-        try (FileInputStream fileIn = new FileInputStream("dados.txt"); 
-                ObjectInputStream in = new ObjectInputStream(fileIn)) {
+        try (FileInputStream fileIn = new FileInputStream("dados.txt"); ObjectInputStream in = new ObjectInputStream(fileIn)) {
             return (DAO) in.readObject();
         } catch (Exception e) {
             e.printStackTrace();
@@ -292,14 +353,22 @@ public class DAO implements Serializable {
                 return usuario;
             }
         }
-        return null; 
+        return null;
+    }
+    public Usuario getUsuarioPorEmail(String email) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getEmail().equals(email)) {
+                return usuario;
+            }
+        }
+        return null;
     }
 
     public Adm loginAdm(String email, String senha) {
         if (adm != null && adm.getEmail().equals(email) && checkSenha(senha, adm.getSenha())) {
             return adm;
         }
-        return null; 
+        return null;
     }
 
 }

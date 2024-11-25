@@ -6,7 +6,7 @@ package controller;
 
 import java.util.ArrayList;
 import model.Publicacao;
-import instancia.DAO;
+import dao.DAO;
 
 public class PublicacaoController {
     private final DAO dao;
